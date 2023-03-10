@@ -1,0 +1,19 @@
+{
+  "name": "social-networking-db-18",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jajohnson0201/Social-Networking-DB-18.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jajohnson0201/Social-Networking-DB-18/issues"
+  },
+  "homepage": "https://github.com/jajohnson0201/Social-Networking-DB-18#readme"
+}
