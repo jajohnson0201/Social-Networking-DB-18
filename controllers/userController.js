@@ -7,7 +7,9 @@ module.exports = {
     },
     getOneUser(req, res) {
         User.findOne({_id: req.params.userID})
-        .populate({path: 'Thought', select: '-__v' })
+        .populate('thoughts')
+        .populate('friends')
+        .select('-__v' )
         .then((user)=> !user  
         ?  res.status(404).json({message: 'No User matches that ID'})
         : res.json(user))
@@ -56,7 +58,7 @@ module.exports = {
     deleteFriend(req, res) {
         User.findOneAndUpdate(
             { _id: req.params.userID },
-            { $pull: { assignment: { thoughts: req.params.friendID } } },
+            { $pull: { friends: req.params.friendID  } },
             { runValidators: true, new: true }
         )
         .then((user)=> 
