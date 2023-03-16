@@ -2,7 +2,10 @@ const { User } = require('../models');
 
 module.exports = {
     getUsers(req, res) {
-        User.find().then((users) => res.json(users))
+        User.find()
+        .populate('thoughts')
+        .populate('friends')
+        .then((users) => res.json(users))
         .catch((err) => res.status(500).json(err));
     },
     getOneUser(req, res) {
@@ -44,7 +47,7 @@ module.exports = {
     addFriend(req, res) {
         User.findOneAndUpdate(
             {_id: req.params.userID },
-            { $addToSet: { thoughts: req.params.friendID } },
+            { $addToSet: { friends: req.params.friendID } },
             { runValidators: true, new: true })
             .then((user) =>
         !user

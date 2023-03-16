@@ -7,7 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(routes);
 
-db.once('once', ()=> {
+db.once('open', ()=> {
     app.listen(PORT, () => {
         console.log(`db server running on port: ${PORT}`);
     });

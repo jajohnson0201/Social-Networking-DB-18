@@ -5,11 +5,11 @@ const {getThoughts,getOneThought,createThought,updateThought,deleteThought,addRe
 router.route('/')
             .get(getThoughts)
             .post(createThought);
-router.route('/:userID')
+router.route('/:thoughtID')
             .get(getOneThought)
             .delete(deleteThought)
             .put(updateThought);
-router.route('/:userID/friends/:friendID')
+router.route('/:thoughtID/reactions/:friendID')
             .post(addReaction)
             .delete(deleteReaction);
 
