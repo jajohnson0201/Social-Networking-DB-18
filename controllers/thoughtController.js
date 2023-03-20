@@ -2,11 +2,15 @@ const { User, reactionSchema } = require('../models');
 const {Thought} = require('../models/Thought');
 module.exports = {
     getThoughts(req, res) {
-        Thought.find().then((Thoughts) => res.json(Thoughts))
+        Thought.find()
+        .populate('reactions')
+        .then((Thoughts) => res.json(Thoughts))
         .catch((err) => res.status(500).json(err));
     },
     getOneThought(req, res) {
         Thought.findOne({_id: req.params.thoughtID})
+        .populate('reactions')
+        .select('-__v')
         .then((thought)=> !thought  
         ?  res.status(404).json({message: 'No Thought matches that ID'})
         : res.json(thought))
@@ -36,7 +40,7 @@ module.exports = {
             { runValidators: true, new: true }
         ).then((thought)=> {
             return User.findOneAndUpdate(
-                {_id: req.body.userID},
+                { username: thought.username},
                 { $set: { thoughts: thought._Id } },
                 { new: true }
             );
@@ -50,29 +54,31 @@ module.exports = {
     deleteThought(req, res) {
         Thought.findOneAndDelete(
             { _id: req.params.thoughtID })
+           
             .then((thought)=> {
                 return User.findOneAndUpdate(
-                    {_id: req.body.userID},
+                    { username: thought.username},
                     { $unset: { thoughts: thought._id } },
                     { new: true }
                 );
             })
+            
             .then((thought)=> 
             !thought
-            ? res.status(404).json({message: 'No Thought with this ID'})
-            : res.json(thought))
+            ? res.status(404).json({message: 'No Thought with this ID',thought})
+            : res.json({msg: 'THOUGHT DELETED',thought}))
             .catch((err)=> res.status(500).json(err));
     },  
     addReaction(req, res) {
         Thought.findOneAndUpdate(
             {_id: req.params.thoughtID },
-            { $addToSet: { reactions: req.body } },
+            { $addToSet: { reactions: req.body} },
             { runValidators: true, new: true })
             .then((thought) =>
         !thought
           ? res
               .status(404)
-              .json({ message: 'No Thought found with that ID' })
+              .json({ message: 'No Thought found with that ID', thought })
           : res.json(thought)
       )
       .catch((err) => res.status(500).json(err));

@@ -9,8 +9,9 @@ router.route('/:thoughtID')
             .get(getOneThought)
             .delete(deleteThought)
             .put(updateThought);
-router.route('/:thoughtID/reactions/:friendID')
-            .post(addReaction)
+router.route('/:thoughtID/reactions')
+            .post(addReaction);
+router.route('/:thoughtID/reactions/:reactionID')
             .delete(deleteReaction);
 
 
